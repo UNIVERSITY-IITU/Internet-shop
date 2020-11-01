@@ -1,0 +1,45 @@
+<!-- left side -->
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz">
+
+    <!-- Categories -->
+    <ul class="list-group">
+        <b>
+            <li class="list-group-item" style="background-color: green;" th:text="#{label.categories}"></li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.all}"><i class="fa fa-shopping-cart" aria-hidden="true"></i> </li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.mobile}"><i class="fa fa-mobile" aria-hidden="true"></i> </li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.tv}"><i class="fa fa-television" aria-hidden="true"></i> </li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.game}"><i class="fa fa-gamepad" aria-hidden="true"></i> </li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.other_devices}"><i class="fa fa-align-justify" aria-hidden="true"></i> </li>
+        </b>
+    </ul>
+
+    <!-- Brands -->
+    <ul class="list-group" style="padding-top: 20px;">
+        <b>
+            <li class="list-group-item list-group-item-action" style="background-color: green;" th:text="#{label.brands}"></li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.apple}"></li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.samsung}"></li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.lg}"></li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.sony}"></li>
+            <li class="list-group-item list-group-item-action" th:text="#{label.other_brands}"><i class="fa fa-align-justify" aria-hidden="true"></i> </li>
+        </b>
+    </ul>
+
+    <!-- Payments -->
+    <ul class="list-group" style="padding-top: 20px;">
+        <b>
+            <li class="list-group-item" style="background-color: green;" th:text="#{label.payments}"></li>
+            <div class="container" style="padding-top: 10px;">
+                <div class="row">
+                    <div class="col-sm-4"><i class="fa fa-paypal fa-3x" aria-hidden="true"></i></div>
+                    <div class="col-sm-4"><i class="fa fa-cc-visa fa-3x" aria-hidden="true"></i></div>
+                    <div class="col-sm-4"><i class="fa fa-cc-mastercard fa-3x" aria-hidden="true"></i></i></div>
+                    <div class="col-sm-4"><i class="fa fa-amazon fa-3x" aria-hidden="true"></i></i></div>
+                    <div class="col-sm-4"><i class="fa fa-google-wallet fa-3x" aria-hidden="true"></i></i></div>
+                    <div class="col-sm-4"><i class="fa fa-cc-stripe fa-3x" aria-hidden="true"></i></i></div>
+                </div>
+            </div>
+        </b>
+    </ul>
+
+</html>

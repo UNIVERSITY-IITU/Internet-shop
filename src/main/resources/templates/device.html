@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator = "layout/user/main.html">
+
+    <!-- right side -->
+    <div layout:fragment = "site_content">
+
+        <div class="card">
+            <img th:src="${device.getSmallPicURL()}" class="card-img-top" alt="...">
+
+            <div class="card-body align-self-center">
+                <a><h5 th:text="${device.getName()}" class="card-title"></h5></a>
+                <h6 th:text="${device.getPrice()}" class="card-title"> $</h6>
+                <p th:text="${device.getDescription()}" class="card-text">c</p>
+            </div>
+
+            <a class="list-group-item list-group-item-dark">
+                <div class="row mr-auto align-self-center">
+                    <i th:each="star : ${#numbers.sequence(0, device.getStars()-1)}"  class="fa fa-star"></i>
+                    <i th:each="star : ${#numbers.sequence(0, 5 - device.getStars() - 1)}" class="fa fa-star-o"></i>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+</html>
