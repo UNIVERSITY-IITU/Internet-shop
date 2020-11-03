@@ -9,15 +9,15 @@
         <div class="row">
             <input type="hidden" name="search" value="true">
             <div class="col-6">
-                <input type="text" class="form-control border border-success" placeholder="Search" name="text">
+                <input th:placeholder="#{label.search_text}" type="text" class="form-control border border-success" name="text">
             </div>
 
             <div class="col-2">
-                <input type="number" class="form-control border border-success" placeholder="from" name="from">
+                <input th:placeholder="#{label.search_from}" type="number" class="form-control border border-success" name="from">
             </div>
 
             <div class="col-2">
-                <input type="number" class="form-control border border-success" placeholder="to" name="to">
+                <input th:placeholder="#{label.search_to}" type="number" class="form-control border border-success" name="to">
             </div>
 
             <div class="col-2">
@@ -29,15 +29,15 @@
 
     <div class="d-flex flex-row-reverse bd-highlight" style="padding-top: 15px;">
         <div class="p-2 bd-highlight">
-            <a href="?order=asc" class="btn btn-success"><i class="fa fa-arrow-circle-o-up"></i> Ascending</a>
+            <a th:text="#{label.sort_asc}" href="?order=asc" class="btn btn-success"><i class="fa fa-arrow-circle-o-up"></i> </a>
         </div>
 
         <div class="p-2 bd-highlight">
-            <a href="?order=desc" class="btn btn-danger"><i class="fa fa-arrow-circle-o-down"></i> Descending</a>
+            <a  th:text="#{label.sort_desc}" href="?order=desc" class="btn btn-danger"><i class="fa fa-arrow-circle-o-down"></i> </a>
         </div>
 
         <div class="p-2 bd-highlight">
-            <p>Order by price : </p>
+            <p th:text="#{label.sort_text}"> : </p>
         </div>
     </div>
 
