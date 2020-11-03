@@ -42,5 +42,27 @@ public class ItemsServiceImplementation implements ItemsService {
         repository.deleteByIdEquals(id);
     }
 
+    @Override
+    public List<Items> filter(String name, double price1, double price2, boolean asc) {
+
+        if (asc){
+            if (name.length() != 0)
+                return repository.findAllByNameLikeAndPriceBetweenOrderByPriceAsc(name, price2, price1);
+            return repository.findAllByPriceBetweenOrderByPriceAsc(price2, price1);
+
+        }else {
+            if (name.length() != 0)
+                return repository.findAllByNameLikeAndPriceBetweenOrderByPriceDesc(name, price2, price1);
+            return repository.findAllByPriceBetweenOrderByPriceDesc(price2, price1);
+        }
+    }
+
+    @Override
+    public List<Items> sort(boolean asc) {
+        if (asc)
+            return repository.findAllByOrderByPriceAsc();
+        return repository.findAllByOrderByPriceDesc();
+    }
+
 
 }

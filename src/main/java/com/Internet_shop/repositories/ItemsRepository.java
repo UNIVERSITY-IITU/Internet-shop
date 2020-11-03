@@ -13,4 +13,15 @@ import java.util.List;
 public interface ItemsRepository extends JpaRepository<Items, Long> {
     void deleteByIdEquals(Long id);
     List<Items> findAllByOrderByInTopPageDesc();
+
+
+    List<Items> findAllByOrderByPriceAsc();
+    List<Items> findAllByOrderByPriceDesc();
+
+    List<Items> findAllByNameLikeAndPriceBetweenOrderByPriceAsc(String name, double price1, double price2);
+    List<Items> findAllByNameLikeAndPriceBetweenOrderByPriceDesc(String name, double price1, double price2);
+
+    List<Items> findAllByPriceBetweenOrderByPriceAsc(double price1, double price2);
+    List<Items> findAllByPriceBetweenOrderByPriceDesc(double price1, double price2);
+
 }

@@ -5,17 +5,42 @@
 <div layout:fragment = "site_content">
 
     <!-- Search form -->
-    <form class="form">
+    <form th:action="@{'/'}" class="form" method="get">
         <div class="row">
-            <div class="col-9">
-                <input type="text" class="form-control border border-success" placeholder="Search">
+            <input type="hidden" name="search" value="true">
+            <div class="col-6">
+                <input type="text" class="form-control border border-success" placeholder="Search" name="text">
             </div>
 
-            <div class="col-3">
-                <a class="btn btn-success btn-block" th:text="#{label.search}"></a>
+            <div class="col-2">
+                <input type="number" class="form-control border border-success" placeholder="from" name="from">
+            </div>
+
+            <div class="col-2">
+                <input type="number" class="form-control border border-success" placeholder="to" name="to">
+            </div>
+
+            <div class="col-2">
+                <button class="btn btn-success btn-block" th:text="#{label.search}"></button>
             </div>
         </div>
     </form>
+
+
+    <div class="d-flex flex-row-reverse bd-highlight" style="padding-top: 15px;">
+        <div class="p-2 bd-highlight">
+            <a href="?order=asc" class="btn btn-success"><i class="fa fa-arrow-circle-o-up"></i> Ascending</a>
+        </div>
+
+        <div class="p-2 bd-highlight">
+            <a href="?order=desc" class="btn btn-danger"><i class="fa fa-arrow-circle-o-down"></i> Descending</a>
+        </div>
+
+        <div class="p-2 bd-highlight">
+            <p>Order by price : </p>
+        </div>
+    </div>
+
 
     <!-- Carousel -->
     <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel" style="padding-top: 20px;">

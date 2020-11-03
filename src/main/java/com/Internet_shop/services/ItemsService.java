@@ -11,9 +11,14 @@ public interface ItemsService {
 
     List<Items> getAllItems();
 
+
     Items getItem(Long id);
 
     Items updateItem(Items item);
 
     void deleteItem(Long id);
+
+    List<Items> filter(String name, double price1, double price2, boolean asc);
+
+    List<Items> sort(boolean asc);
 }
