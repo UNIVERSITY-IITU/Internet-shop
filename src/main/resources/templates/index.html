@@ -95,7 +95,7 @@
                 <div class="card-body align-self-center">
                     <a th:href="@{'/device/' + ${device.getId()}}"><h5 th:text="${device.getName()}" class="card-title"></h5></a>
                     <h6 th:text="${device.getPrice()}" class="card-title"> $</h6>
-                    <p th:text="${device.getDescription()}" class="card-text">c</p>
+                    <p th:utext="${device.getDescription()}" class="card-text">c</p>
                 </div>
 
                 <a class="list-group-item list-group-item-dark">
