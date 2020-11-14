@@ -8,8 +8,15 @@
     <form th:action="@{'/'}" class="form" method="get">
         <div class="row">
             <input type="hidden" name="search" value="true">
-            <div class="col-6">
+            <div class="col-3">
                 <input th:placeholder="#{label.search_text}" type="text" class="form-control border border-success" name="text">
+            </div>
+
+            <div class="col-3">
+                <select class="form-control">
+                    <option th:each="brand : ${brands}" th:text="${brand.getName()}" th:value="${brand.getCountry().getId()}" name="brand_id"></option>
+                </select>
+
             </div>
 
             <div class="col-2">

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator = "layout/admin/admin_main.html">
+
+<div layout:fragment = "site_content">
+<!-- add new  button -->
+<div class="row">
+    <div class="col-9"></div>
+    <div class="col-3">
+        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#addModal">ADD NEW</button>
+    </div>
+</div>
+
+<!-- add new  modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add new countries</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form th:action="@{add_country}" method="POST">
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="name">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Code</label>
+                            <input type="text" class="form-control" name="code">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="sumbit" class="btn btn-danger">Save</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- title table -->
+<h3 class="text-left">Countries</h3>
+
+<div class="row">
+    <div class="col-12">
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Code</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="country : ${countries}">
+                <th th:text="${country.getId()}" scope="row"></th>
+                <td th:text="${country.getName()}"></td>
+                <td th:text="${country.getCode()}"></td>
+                <td>
+                    <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
+                    <button th:attr="data-target='#updateModal'+${country.getId()}" type="button" class="btn btn-success" data-toggle="modal"><i class="fas fa-edit"></i></button>
+                    <button th:attr="data-target='#deleteModal'+${country.getId()}"  type="button" class="btn btn-danger" data-toggle="modal"><i class="far fa-trash-alt"></i></button>
+                </td>
+
+                <!-- delete modal -->
+                <div th:id="'deleteModal'+${country.getId()}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Are you sure to delete</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <p th:text="${country.getName()}"></p>
+                            </div>
+
+                            <form th:action="@{countries/delete}" method="POST">
+                                <div class="modal-footer">
+                                    <input th:value="${country.getId()}" type="hidden" name="id">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="sumbit" class="btn btn-danger">delete</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- update modal -->
+                <div th:id="'updateModal'+${country.getId()}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Update</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <form th:action="@{update_country}" method="POST">
+                                <div class="modal-body">
+                                    <div class="container">
+                                        <div class="form-group">
+                                            <input type="hidden" name="id" th:value="${country.getId()}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Code</label>
+                                            <input type="text" class="form-control" name="name" th:value="${country.getName()}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Code</label>
+                                            <input type="text" class="form-control" name="code" th:value="${country.getCode()}">
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="sumbit" class="btn btn-danger">Save</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+</html>

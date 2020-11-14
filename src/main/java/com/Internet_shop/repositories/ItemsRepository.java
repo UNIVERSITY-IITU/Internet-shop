@@ -1,5 +1,6 @@
 package com.Internet_shop.repositories;
 
+import com.Internet_shop.entities.Brands;
 import com.Internet_shop.entities.Items;
 import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +21,9 @@ public interface ItemsRepository extends JpaRepository<Items, Long> {
 
     List<Items> findAllByNameLikeAndPriceBetweenOrderByPriceAsc(String name, double price1, double price2);
     List<Items> findAllByNameLikeAndPriceBetweenOrderByPriceDesc(String name, double price1, double price2);
+
+    List<Items> findAllByNameLikeAndPriceBetweenAndBrandEqualsOrderByPriceAsc(String name, double price1, double price2, Brands brand);
+    List<Items> findAllByNameLikeAndPriceBetweenAndBrandEqualsOrderByPriceDesc(String name, double price1, double price2, Brands brand);
 
     List<Items> findAllByPriceBetweenOrderByPriceAsc(double price1, double price2);
     List<Items> findAllByPriceBetweenOrderByPriceDesc(double price1, double price2);

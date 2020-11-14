@@ -1,6 +1,8 @@
 package com.Internet_shop.controllers;
 
 
+import com.Internet_shop.services.BrandsService;
+import com.Internet_shop.services.CountriesService;
 import com.Internet_shop.services.ItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,12 +14,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller()
 public class UserController {
     @Autowired
-    ItemsService itemsService;
+    private ItemsService itemsService;
+
+    @Autowired
+    private BrandsService brandsService;
+
+    @Autowired
+    private CountriesService countriesService;
 
     @GetMapping(value = "/")
     public String index(Model model,
             @RequestParam(name = "search",  defaultValue = "",             required = true) String search,
             @RequestParam(name = "text",    defaultValue = "",              required = true) String text,
+            @RequestParam(name = "brand_id",    defaultValue = "",              required = true) Long brand_id,
             @RequestParam(name = "from",    defaultValue = "0.0",             required = true) double from,
             @RequestParam(name = "to",      defaultValue = "100000000.0", required = true) double to,
             @RequestParam(name = "order",   defaultValue = "",             required = true) String order
@@ -32,6 +41,8 @@ public class UserController {
         }else {
             model.addAttribute("devices", itemsService.getAllItems());
         }
+
+        model.addAttribute("brands", brandsService.getAllBrands());
         return "index";
     }
 

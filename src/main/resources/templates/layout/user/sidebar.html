@@ -17,11 +17,12 @@
     <ul class="list-group" style="padding-top: 20px;">
         <b>
             <li class="list-group-item list-group-item-action" style="background-color: green;" th:text="#{label.brands}"></li>
-            <li class="list-group-item list-group-item-action" th:text="#{label.apple}"></li>
-            <li class="list-group-item list-group-item-action" th:text="#{label.samsung}"></li>
-            <li class="list-group-item list-group-item-action" th:text="#{label.lg}"></li>
-            <li class="list-group-item list-group-item-action" th:text="#{label.sony}"></li>
-            <li class="list-group-item list-group-item-action" th:text="#{label.other_brands}"><i class="fa fa-align-justify" aria-hidden="true"></i> </li>
+            <li th:each="brand : ${brands}" th:text="${brand.getName()}" class="list-group-item list-group-item-action"></li>
+<!--            <li class="list-group-item list-group-item-action" th:text="#{label.apple}"></li>-->
+<!--            <li class="list-group-item list-group-item-action" th:text="#{label.samsung}"></li>-->
+<!--            <li class="list-group-item list-group-item-action" th:text="#{label.lg}"></li>-->
+<!--            <li class="list-group-item list-group-item-action" th:text="#{label.sony}"></li>-->
+<!--            <li class="list-group-item list-group-item-action" th:text="#{label.other_brands}"><i class="fa fa-align-justify" aria-hidden="true"></i> </li>-->
         </b>
     </ul>
 
