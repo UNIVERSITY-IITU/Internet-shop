@@ -2,6 +2,7 @@ package com.Internet_shop.controllers;
 
 
 import com.Internet_shop.services.BrandsService;
+import com.Internet_shop.services.CategoriesService;
 import com.Internet_shop.services.CountriesService;
 import com.Internet_shop.services.ItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,27 +23,41 @@ public class UserController {
     @Autowired
     private CountriesService countriesService;
 
+    @Autowired
+    private CategoriesService categoriesService;
+
     @GetMapping(value = "/")
     public String index(Model model,
-            @RequestParam(name = "search",  defaultValue = "",             required = true) String search,
+
             @RequestParam(name = "text",    defaultValue = "",              required = true) String text,
-            @RequestParam(name = "brand_id",    defaultValue = "",              required = true) Long brand_id,
+            @RequestParam(name = "brand_id",    defaultValue = "0",              required = true) Long brand_id,
+            @RequestParam(name = "category_id",    defaultValue = "0",              required = true) Long category_id,
             @RequestParam(name = "from",    defaultValue = "0.0",             required = true) double from,
             @RequestParam(name = "to",      defaultValue = "100000000.0", required = true) double to,
             @RequestParam(name = "order",   defaultValue = "",             required = true) String order
     ){
-        boolean order_asc = order.equals("asc");
 
-        if (search.equals("true")){
-            System.out.println("\n\n"+itemsService.filter(text, to, from, order_asc) + "\n\n");
-            model.addAttribute("devices", itemsService.filter(text, to, from, order_asc));
-        }else if (!order.isEmpty()){
-            model.addAttribute("devices", itemsService.sort(order_asc));
-        }else {
-            model.addAttribute("devices", itemsService.getAllItems());
+        try {
+            if (brand_id>0){
+                System.out.println("1");
+                model.addAttribute("devices", itemsService.brandsFilter(text, from, to, brandsService.getBrand(brand_id)));
+            }else if(category_id>0){
+                System.out.println("2");
+                model.addAttribute("devices", itemsService.byCategories(categoriesService.getCategory(category_id)));
+            }else if (!order.isEmpty()){
+                model.addAttribute("devices", itemsService.sortBy(Boolean.parseBoolean(order)));
+            }
+            else{
+                System.out.println("3");
+                model.addAttribute("devices", itemsService.defaultFilter(text, from, to));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
+
         model.addAttribute("brands", brandsService.getAllBrands());
+        model.addAttribute("categories", categoriesService.getAllCategories());
         return "index";
     }
 

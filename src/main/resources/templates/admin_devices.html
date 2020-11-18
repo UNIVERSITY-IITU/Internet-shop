@@ -58,7 +58,7 @@
                         <div class="form-group">
                             <label>Brand : </label>
                             <select class="form-control" name="brand_id">
-                                <option th:each="brand : ${brands}" th:text="${brand.getName()}" th:value="${brand.getId()}"></option>
+                                <option th:each="brand : ${brands}" th:text="${brand.getName()} + ', ' + ${brand.getCountry().getName()}" th:value="${brand.getId()}"></option>
                             </select>
                         </div>
 
@@ -104,6 +104,7 @@
                 <th scope="col">Price</th>
                 <th scope="col">Added date</th>
                 <th scope="col">Categories</th>
+                <th scope="col">Brand</th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -115,8 +116,9 @@
                 <td th:text="${device.getPrice()}"></td>
                 <td th:text="${device.getAddedDate()}"></td>
                 <td>
-                    <span th:each="cat : ${device.getCategories()}" th:text="${cat.getName()}"> </span>
+                    <span th:each="cat : ${device.getCategories()}" th:text="${cat.getName()}">, </span>
                 </td>
+                <td th:text="${device.getBrand().getName()}"></td>
                 <td>
                     <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
                     <button th:attr="data-target='#updateModal'+${device.getId()}" type="button" class="btn btn-success" data-toggle="modal"><i class="fas fa-edit"></i></button>
@@ -201,7 +203,7 @@
                                         <div class="form-group">
                                             <label>Brand : </label>
                                             <select class="form-control" name="brand_id">
-                                                <option th:each="brand : ${brands}" th:text="${brand.getName()}" th:value="${brand.getId()}"></option>
+                                                <option th:each="brand : ${brands}" th:text="${brand.getName()} + ', ' + ${brand.getCountry().getName()}" th:value="${brand.getId()}"></option>
                                             </select>
                                         </div>
 
