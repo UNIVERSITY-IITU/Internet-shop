@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator = "layout/admin/admin_main.html">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" xmlns:sec = "http://www.thymeleaf.org/extras/spring-security" layout:decorator = "layout/admin/admin_main.html">
 
 <div layout:fragment = "site_content">
 <!-- add new  button -->
 <div class="row">
     <div class="col-9"></div>
     <div class="col-3">
-        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#addModal">ADD NEW</button>
+        <button sec:authorize="hasAnyRole('ROLE_ADMIN')" type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#addModal">ADD NEW</button>
     </div>
 </div>
 
 <!-- add new  modal -->
-<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div sec:authorize="hasAnyRole('ROLE_ADMIN')" class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -63,7 +63,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Country</th>
-                <th scope="col">Actions</th>
+                <th sec:authorize="hasAnyRole('ROLE_ADMIN')" scope="col">Actions</th>
             </tr>
             </thead>
 
@@ -72,14 +72,14 @@
                 <th th:text="${brand.getId()}" scope="row"></th>
                 <td th:text="${brand.getName()}"></td>
                 <td th:text="${brand.getCountry().getName()}"></td>
-                <td>
+                <td sec:authorize="hasAnyRole('ROLE_ADMIN')">
                     <button type="button" class="btn btn-primary"><i class="far fa-eye"></i></button>
                     <button th:attr="data-target='#updateModal'+${brand.getId()}" type="button" class="btn btn-success" data-toggle="modal"><i class="fas fa-edit"></i></button>
                     <button th:attr="data-target='#deleteModal'+${brand.getId()}"  type="button" class="btn btn-danger" data-toggle="modal"><i class="far fa-trash-alt"></i></button>
                 </td>
 
                 <!-- delete modal -->
-                <div th:id="'deleteModal'+${brand.getId()}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div sec:authorize="hasAnyRole('ROLE_ADMIN')" th:id="'deleteModal'+${brand.getId()}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -106,7 +106,7 @@
                 </div>
 
                 <!-- update modal -->
-                <div th:id="'updateModal'+${brand.getId()}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div sec:authorize="hasAnyRole('ROLE_ADMIN')" th:id="'updateModal'+${brand.getId()}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">

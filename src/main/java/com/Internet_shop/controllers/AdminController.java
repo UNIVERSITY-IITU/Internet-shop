@@ -1,15 +1,10 @@
 package com.Internet_shop.controllers;
 
 
-import com.Internet_shop.entities.Brands;
-import com.Internet_shop.entities.Categories;
-import com.Internet_shop.entities.Countries;
-import com.Internet_shop.entities.Items;
-import com.Internet_shop.services.BrandsService;
-import com.Internet_shop.services.CategoriesService;
-import com.Internet_shop.services.CountriesService;
-import com.Internet_shop.services.ItemsService;
+import com.Internet_shop.entities.*;
+import com.Internet_shop.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller(value = "/admin")
@@ -33,6 +29,12 @@ public class AdminController {
 
     @Autowired
     private CategoriesService categoriesService;
+
+    @Autowired
+    private UsersService usersService;
+
+    @Autowired
+    private RolesService rolesService;
 
     // READ
     @GetMapping(value = "/admin/devices")
@@ -64,6 +66,14 @@ public class AdminController {
         model.addAttribute("categories", categoriesService.getAllCategories());
         model.addAttribute("page", "categories");
         return "admin_categories";
+    }
+
+    @GetMapping(value = "/admin/users")
+    public String adminUsers(Model model){
+        model.addAttribute("users", usersService.getAllUsers());
+        model.addAttribute("roles", rolesService.getAllRoles());
+        model.addAttribute("page", "users");
+        return "admin_users";
     }
 
     // CREATE
@@ -115,6 +125,31 @@ public class AdminController {
         return "redirect:/admin/categories";
     }
 
+    @PostMapping(value = "admin/add_users")
+    private String addUser(
+            @RequestParam(name = "email",                                required = false) String email,
+            @RequestParam(name = "password",                                required = false) String password,
+            @RequestParam(name = "fullname",                                required = false) String fullname,
+            @RequestParam(name = "roles_id",                       required = false) List<Long> roles_id
+    ){
+        System.out.println(email + password + fullname);
+        try {
+            assert roles_id.size() != 0;
+            List<Roles> user_roles = rolesService.getRolesByID(roles_id);
+            System.out.println(user_roles + "-----------");
+            assert user_roles.size() != 0;
+            Users users = new Users(null,email, password, fullname, user_roles, null);
+//            assert usersService.createAdminUsers(users)!=null;
+            usersService.createAdminUsers(users);
+            return "redirect:/admin/users?status=success";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "redirect:/admin/users?status=error";
+        }
+
+
+    }
+
 
     // DELETE
     @PostMapping(value = "admin/{page}/delete")
@@ -134,6 +169,8 @@ public class AdminController {
             case "categories":
                 categoriesService.deleteCategory(id);
                 break;
+            case "users":
+                usersService.deleteUserById(id);
         }
         return "redirect:/admin/" + page;
     }
@@ -153,6 +190,8 @@ public class AdminController {
             @RequestParam(name = "categories_id",                       required = false) List<Long> categories_id
     ){
         Brands brand = brandsService.getBrand(brand_id);
+
+
         if (brand != null){
             itemsService.updateItem(new Items(id,name,description,price,stars,smallPicURL,largePicURL,null,inTopPage, brand, categoriesService.getCategoriesById(categories_id)));
         }

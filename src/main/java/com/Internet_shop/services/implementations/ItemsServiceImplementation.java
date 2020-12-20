@@ -29,6 +29,12 @@ public class ItemsServiceImplementation implements ItemsService {
     }
     @Override
     public List<Items> getAllItems() {return repository.findAll();}
+
+    @Override
+    public List<Items> getItemsById(List<Long> id) {
+        return repository.findAllById(id);
+    }
+
     @Override
     public Items updateItem(Items item) {
         return repository.save(item);

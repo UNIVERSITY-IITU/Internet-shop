@@ -1,26 +1,70 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" layout:decorator = "layout/user/main.html">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" xmlns:sec = "http://www.thymeleaf.org/extras/spring-security" layout:decorator = "layout/user/main.html">
 
     <!-- right side -->
     <div layout:fragment = "site_content">
 
-        <div class="card">
-            <img th:src="${device.getSmallPicURL()}" class="card-img-top" alt="...">
+        <div class="container">
+            <div class="card">
+                <img id="top_image" th:src="${device.getSmallPicURL()}" class="card-img-top" alt="..." style="max-height: 300px;">
 
-            <div class="card-body align-self-center">
-                <a><h5 th:text="${device.getName()}" class="card-title"></h5></a>
-                <h6 th:text="${device.getPrice()}" class="card-title"> $</h6>
-                <p th:text="${device.getDescription()}" class="card-text">c</p>
+                <div class="card-body align-self-center">
+                    <a><h5 th:text="${device.getName()}" class="card-title"></h5></a>
+                    <h6 th:text="${device.getPrice()}" class="card-title"> $</h6>
+                    <p th:text="${device.getDescription()}" class="card-text">c</p>
+                </div>
+
+                <a class="list-group-item list-group-item-dark">
+                    <div class="row mr-auto align-self-center">
+                        <i th:each="star : ${#numbers.sequence(0, device.getStars()-1)}"  class="fa fa-star"></i>
+                        <i th:each="star : ${#numbers.sequence(0, 5 - device.getStars() - 1)}" class="fa fa-star-o"></i>
+                    </div>
+                </a>
+                <form method="post" th:action="@{'/device/add_basket'}">
+                    <input type="hidden" name="item_id" th:value="${device.getId()}">
+                    <button type="submit" class="btn btn-primary">add basket</button>
+                </form>
             </div>
 
-            <a class="list-group-item list-group-item-dark">
-                <div class="row mr-auto align-self-center">
-                    <i th:each="star : ${#numbers.sequence(0, device.getStars()-1)}"  class="fa fa-star"></i>
-                    <i th:each="star : ${#numbers.sequence(0, 5 - device.getStars() - 1)}" class="fa fa-star-o"></i>
+            <div class="row">
+                <div th:each="picture : ${picturesList}" class="col-2">
+                    <img th:src="@{'/view_image/' + ${picture.getUrl()}}" class="img-thumbnail">
                 </div>
-            </a>
-        </div>
+            </div>
 
+            <form th:action="@{'/detail/devices/add_comment'}" method="post">
+                <div class="form-floating">
+                    <textarea name="comment_text" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2">Comments</label>
+                    <input type="hidden" name="item_id" th:value="${device.getId()}">
+                </div>
+                <button type="submit" class="btn btn-primary">add</button>
+            </form>
+
+
+            <div th:each="comment : ${comments}" class="row">
+                <div class="col-8">
+                    <h2 th:text="${comment.getAuthor().getFullname()}"></h2>
+                    <h4 th:text="${comment.getComment()}"></h4>
+                </div>
+                <div class="col-4">
+                    <small th:text="${comment.getAddedDate()}"></small>
+                    <div class="row">
+                        <form method="post" th:action="@{'/detail/devices/remove_comment'}">
+                            <input type="hidden" name="comment_id" th:value="${comment.getId()}">
+                            <input type="hidden" name="item_id" th:value="${device.getId()}">
+                            <button  type="submit" class="btn btn-danger">-</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+
+<script>
+function change_center() {
+    
+}    
+</script>
 </html>

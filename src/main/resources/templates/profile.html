@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout"  xmlns:sec = "http://www.thymeleaf.org/extras/spring-security" layout:decorator = "layout/user/main.html">
+
+<!-- right side -->
+<div layout:fragment = "site_content">
+
+    <div class="row">
+        <div class="col-4">
+            <a id="pop"><img th:src="@{'/view_image/' + ${currentUser.imageUrl}}" class="img-thumbnail" alt="..."></a>
+        </div>
+        <div class="col-8">
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
+                    <a class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Change Password</a>
+                    <a class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Shop History</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div class="row g-2 mt-3">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input readonly th:value="${currentUser.getFullname()}" type="text" class="form-control" id="floatingInputGrid">
+                                <label for="floatingInputGrid">Full name</label>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input readonly th:value="${currentUser.getEmail()}" type="text" class="form-control" id="floatingInputGrid">
+                                <label for="floatingInputGrid">Username</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <h3>Change password</h3>
+
+                    <form method="post" th:action="@{'/detail/profile/change_password'}">
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="floatingInputGrid" name="old_password">
+                                <label for="floatingInputGrid">Old password</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mt-3">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="floatingInputGrid" name="new_password">
+                                <label for="floatingInputGrid">New password</label>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="password" class="form-control" id="floatingInputGrid">
+                                <label for="floatingInputGrid">Renew password</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">change</button>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{'/upload_image'}" method="post" enctype='multipart/form-data'>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Default file input example</label>
+                            <input class="form-control" type="file" id="formFile" name="image">
+                        </div>
+                        <button>send</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" language="javascript">
+
+        $(document).ready(function () {
+            $("#pop").click(function () {
+                $('#myModal').modal('show');
+            });
+        });
+
+
+
+    </script>
+
+
+
+
+</div>
+
+</html>

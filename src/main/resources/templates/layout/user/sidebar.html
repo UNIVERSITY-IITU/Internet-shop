@@ -1,8 +1,8 @@
 <!-- left side -->
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz"  xmlns:sec = "http://www.thymeleaf.org/extras/spring-security">
 
     <!-- Categories -->
-    <ul class="list-group">
+    <ul class="list-group" sec:authorize="isAuthenticated()">
         <b>
             <li class="list-group-item" style="background-color: green;" th:text="#{label.categories}"></li>
             <a href="/"  class="list-group-item list-group-item-action" th:text="#{label.all}"></a>
@@ -11,7 +11,7 @@
     </ul>
 
     <!-- Brands -->
-    <ul class="list-group" style="padding-top: 20px;">
+    <ul class="list-group" style="padding-top: 20px;" sec:authorize="isAuthenticated()">
         <b>
             <li class="list-group-item list-group-item-action" style="background-color: green;" th:text="#{label.brands}"></li>
             <a  th:each="brand : ${brands}" th:text="${brand.getName()}" class="list-group-item list-group-item-action" th:href="'?brand_id=' + ${brand.getId()}"></a>
@@ -19,7 +19,7 @@
     </ul>
 
     <!-- Payments -->
-    <ul class="list-group" style="padding-top: 20px;">
+    <ul class="list-group" style="padding-top: 20px;" sec:authorize="isAuthenticated()">
         <b>
             <li class="list-group-item" style="background-color: green;" th:text="#{label.payments}"></li>
             <div class="container" style="padding-top: 10px;">

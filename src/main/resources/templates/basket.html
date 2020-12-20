@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://ultraq.net.nz/thymeleaf/layout" xmlns:sec = "http://www.thymeleaf.org/extras/spring-security" layout:decorator = "layout/user/main.html">
+
+<!-- right side -->
+<div layout:fragment = "site_content">
+    <h1>Basket</h1>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Price</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="item : ${items}">
+            <th th:text="${item.key.getName()}" scope="row"></th>
+            <td th:text="${item.key.getPrice()}"></td>
+            <td th:text="${item.value}"></td>
+            <td>
+                <div class="row">
+                    <form method="post" th:action="@{'/device/plus_basket'}">
+                        <input type="hidden" name="item_id" th:value="${item.key.getId()}">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    </form>
+                    <form method="post" th:action="@{'/device/minus_basket'}">
+                        <input type="hidden" name="item_id" th:value="${item.key.getId()}">
+                        <button type="submit" class="btn btn-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-8">
+            <span>Total : </span>
+            <h3  th:text="${totalPrice}"></h3>
+        </div>
+        <div class="col-2">
+            <button type="button" class="btn btn-primary input-block-level form-control" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                check in
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">Full name</span>
+                                    <input type="text" class="form-control" placeholder="FIRSTNAME LASTNAME" aria-describedby="basic-addon1">
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">Card number</span>
+                                    <input type="text" class="form-control" placeholder="**** **** **** ****" aria-describedby="basic-addon1">
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">MM/YY</span>
+                                    <input required type="text" class="form-control" placeholder="12/22">
+                                    <span class="input-group-text">CVV</span>
+                                    <input required type="text" class="form-control" placeholder="***">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Understood</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-2">
+            <div class="row">
+                <form method="post" th:action="@{'/device/clean_basket'}">
+                    <button type="submit" class="btn btn-danger input-block-level form-control">clean basket</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

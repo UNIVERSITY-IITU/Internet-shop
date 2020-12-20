@@ -13,6 +13,7 @@ public interface ItemsService {
 
     List<Items> getAllItems();
 
+    List<Items> getItemsById(List<Long> id);
 
     Items getItem(Long id);
 
