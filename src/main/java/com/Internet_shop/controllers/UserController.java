@@ -3,6 +3,7 @@ package com.Internet_shop.controllers;
 
 import com.Internet_shop.entities.Items;
 import com.Internet_shop.entities.Pictures;
+import com.Internet_shop.entities.Sale;
 import com.Internet_shop.entities.Users;
 import com.Internet_shop.services.*;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,10 +26,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,6 +60,9 @@ public class UserController {
     @Autowired
     private HttpSession httpSession;
 
+    @Autowired
+    private SaleService saleService;
+
     @Value("${file.images.viewPath}")
     private String viewPath;
 
@@ -86,7 +88,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/")
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public String index(Model model,
 
             @RequestParam(name = "text",    defaultValue = "",              required = true) String text,
@@ -115,6 +117,12 @@ public class UserController {
             e.printStackTrace();
         }
 
+        Map<Long, Long> session_items = (Map<Long, Long>) httpSession.getAttribute("basket");
+        if (session_items!=null){
+            model.addAttribute("basket_size", session_items.size());
+        }else{
+            model.addAttribute("basket_size", 0);
+        }
         model.addAttribute("currentUser", getUserData());
         model.addAttribute("brands", brandsService.getAllBrands());
         model.addAttribute("categories", categoriesService.getAllCategories());
@@ -123,15 +131,24 @@ public class UserController {
 
 
     @GetMapping(value = "/device/{id}")
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public String device(Model model, @PathVariable(name = "id") Long id){
+        Map<Long, Long> session_items = (Map<Long, Long>) httpSession.getAttribute("basket");
         Items items = itemsService.getItem(id);
         List<Pictures> picturesList = picturesService.getPictures(items);
 
+        if (session_items!=null){
+            model.addAttribute("basket_size", session_items.size());
+        }else{
+            model.addAttribute("basket_size", 0);
+        }
+        System.out.println(commentService.getCommentsByItem(items));
         model.addAttribute("comments", commentService.getCommentsByItem(items));
         model.addAttribute("picturesList", picturesList);
         model.addAttribute("currentUser", getUserData());
         model.addAttribute("device", items);
+        model.addAttribute("brands", brandsService.getAllBrands());
+        model.addAttribute("categories", categoriesService.getAllCategories());
         return "device";
     }
 
@@ -147,14 +164,54 @@ public class UserController {
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.println(totalPrice[0]);
+
+        if (session_items!=null){
+            model.addAttribute("basket_size", session_items.size());
+        }else{
+            model.addAttribute("basket_size", 0);
+        }
+
         model.addAttribute("totalPrice", totalPrice[0]);
         model.addAttribute("items", itemsLongMap);
         model.addAttribute("currentUser", getUserData());
+        model.addAttribute("brands", brandsService.getAllBrands());
+        model.addAttribute("categories", categoriesService.getAllCategories());
         return "basket";
     }
 
 
+    @PostMapping(value = "/device/add_sale")
+    public String addSale(){
+        Map<Long, Long> session_items = (Map<Long, Long>) httpSession.getAttribute("basket");
+        Users currentUser = getUserData();
+        try{
+            assert session_items!=null;
+            List<Users> users = new ArrayList<>();
+            users.add(currentUser);
+
+            for (Long item_id : session_items.keySet()) {
+                Items items = itemsService.getItem(item_id);
+                Sale sale = saleService.getSaleByItem(items);
+                if (sale!=null){
+                    Long amount = sale.getAmount();
+                    amount += session_items.get(item_id);
+                    List<Users> saleUsers = sale.getUsers();
+                    if (!saleUsers.contains(currentUser)) {
+                        saleUsers.add(currentUser);
+                    }
+                    sale.setUsers(saleUsers);
+                    sale.setAmount(amount);
+                }else {
+                    sale = new Sale(null, session_items.get(item_id),null, items, users);
+                }
+                saleService.saveSale(sale);
+            }
+            httpSession.setAttribute("basket", null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "redirect:/basket";
+    }
 
     @PostMapping(value = "/device/add_basket")
     public String addBasket(Model model,HttpServletRequest request, HttpServletResponse response, @RequestParam(name = "item_id") Long item_id){
@@ -250,7 +307,15 @@ public class UserController {
 
     @GetMapping(value = "/profile")
     public String profilePage(Model model){
+        Map<Long, Long> session_items = (Map<Long, Long>) httpSession.getAttribute("basket");
+        if (session_items!=null) {
+            model.addAttribute("basket_size", session_items.size());
+        }else{
+            model.addAttribute("basket_size", 0);
+        }
         model.addAttribute("currentUser", getUserData());
+        model.addAttribute("brands", brandsService.getAllBrands());
+        model.addAttribute("categories", categoriesService.getAllCategories());
         return "profile";
     }
 

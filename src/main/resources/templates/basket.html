@@ -41,9 +41,10 @@
             <h3  th:text="${totalPrice}"></h3>
         </div>
         <div class="col-2">
-            <button type="button" class="btn btn-primary input-block-level form-control" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                check in
-            </button>
+            <form th:action="@{'/device/add_sale'}" method="post">
+                <button type="button" class="btn btn-primary input-block-level form-control" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    check in
+                </button>
 
             <!-- Modal -->
             <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -75,11 +76,12 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Understood</button>
+                            <button type="submit" class="btn btn-primary">Buy</button>
                         </div>
                     </div>
                 </div>
             </div>
+            </form>
 
         </div>
         <div class="col-2">

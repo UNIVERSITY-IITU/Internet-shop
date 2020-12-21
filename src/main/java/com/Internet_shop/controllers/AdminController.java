@@ -36,8 +36,18 @@ public class AdminController {
     @Autowired
     private RolesService rolesService;
 
+    @Autowired
+    private SaleService saleService;
+
+    @GetMapping(value = "/admin/sales")
+    public String adminSales(Model model){
+        model.addAttribute("sales", saleService.getAllSales());
+        return "admin_sales";
+    }
+
     // READ
     @GetMapping(value = "/admin/devices")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     public String adminDevice(Model model){
         model.addAttribute("categories", categoriesService.getAllCategories());
         model.addAttribute("devices", itemsService.getAllItems());
@@ -47,6 +57,7 @@ public class AdminController {
     }
 
     @GetMapping(value = "/admin/brands")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     public String adminBrand(Model model){
         model.addAttribute("brands", brandsService.getAllBrands());
         model.addAttribute("countries", countriesService.getAllCountries());
@@ -55,6 +66,7 @@ public class AdminController {
     }
 
     @GetMapping(value = "/admin/countries")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     public String adminCountry(Model model){
         model.addAttribute("countries", countriesService.getAllCountries());
         model.addAttribute("page", "countries");
@@ -62,6 +74,7 @@ public class AdminController {
     }
 
     @GetMapping(value = "/admin/categories")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     public String adminCategory(Model model){
         model.addAttribute("categories", categoriesService.getAllCategories());
         model.addAttribute("page", "categories");
@@ -69,6 +82,7 @@ public class AdminController {
     }
 
     @GetMapping(value = "/admin/users")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MODERATOR')")
     public String adminUsers(Model model){
         model.addAttribute("users", usersService.getAllUsers());
         model.addAttribute("roles", rolesService.getAllRoles());

@@ -3,7 +3,7 @@
 
 <!-- right side -->
 <div layout:fragment = "site_content">
-
+    <div class="container">
     <div class="row">
         <div class="col-4">
             <a id="pop"><img th:src="@{'/view_image/' + ${currentUser.imageUrl}}" class="img-thumbnail" alt="..."></a>
@@ -85,12 +85,11 @@
                             <label for="formFile" class="form-label">Default file input example</label>
                             <input class="form-control" type="file" id="formFile" name="image">
                         </div>
-                        <button>send</button>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -98,20 +97,16 @@
 
 
     <script type="text/javascript" language="javascript">
-
         $(document).ready(function () {
             $("#pop").click(function () {
                 $('#myModal').modal('show');
             });
         });
-
-
-
     </script>
 
 
 
-
+    </div>
 </div>
 
 </html>

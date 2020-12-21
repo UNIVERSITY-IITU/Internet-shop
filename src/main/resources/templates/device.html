@@ -8,52 +8,99 @@
             <div class="card">
                 <img id="top_image" th:src="${device.getSmallPicURL()}" class="card-img-top" alt="..." style="max-height: 300px;">
 
+                <div class="row">
+                    <div th:each="picture : ${picturesList}" class="col-2">
+                        <img th:src="@{'/view_image/' + ${picture.getUrl()}}" class="img-thumbnail">
+                    </div>
+                </div>
+
                 <div class="card-body align-self-center">
                     <a><h5 th:text="${device.getName()}" class="card-title"></h5></a>
                     <h6 th:text="${device.getPrice()}" class="card-title"> $</h6>
                     <p th:text="${device.getDescription()}" class="card-text">c</p>
                 </div>
 
-                <a class="list-group-item list-group-item-dark">
-                    <div class="row mr-auto align-self-center">
-                        <i th:each="star : ${#numbers.sequence(0, device.getStars()-1)}"  class="fa fa-star"></i>
-                        <i th:each="star : ${#numbers.sequence(0, 5 - device.getStars() - 1)}" class="fa fa-star-o"></i>
+                <div class="card-footer text-muted">
+                    <div th:each="i : ${#numbers.sequence(0, 5)}" style="display: inline-block;">
+                        <i th:if="${i < device.getStars()}" class="far fa-star" style="color: red"></i>
+                        <i th:if="${i > device.getStars()}" class="far fa-star"></i>
                     </div>
-                </a>
-                <form method="post" th:action="@{'/device/add_basket'}">
-                    <input type="hidden" name="item_id" th:value="${device.getId()}">
-                    <button type="submit" class="btn btn-primary">add basket</button>
-                </form>
+                </div>
             </div>
 
             <div class="row">
-                <div th:each="picture : ${picturesList}" class="col-2">
-                    <img th:src="@{'/view_image/' + ${picture.getUrl()}}" class="img-thumbnail">
+                <div class="col-1">
+                    <form class="form-inline" method="post" th:action="@{'/device/add_basket'}">
+                        <input type="hidden" name="item_id" th:value="${device.getId()}">
+                        <button th:text="#{label.save}" type="submit" class="btn btn-primary"><i class="fa fa-shopping-basket" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+                <div class="col-1">
+                    <button th:text="#{label.comment}" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="col-10"></div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{'/detail/devices/add_comment'}" method="post">
+                        <div class="modal-body">
+                                <div class="form-floating">
+                                    <textarea name="comment_text" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                                    <label for="floatingTextarea2">Comments</label>
+                                    <input type="hidden" name="item_id" th:value="${device.getId()}">
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button th:text="#{label.cancel}" type="button" class="btn btn-secondary" data-bs-dismiss="modal"></button>
+                            <button th:text="#{label.save}" type="submit" class="btn btn-primary"></button>
+                        </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
-            <form th:action="@{'/detail/devices/add_comment'}" method="post">
-                <div class="form-floating">
-                    <textarea name="comment_text" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                    <label for="floatingTextarea2">Comments</label>
+
+            <div th:each="comment : ${comments}" class="card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${comment.getAuthor().getFullname()}"></h5>
+                    <p class="card-text" th:text="${comment.getComment()}"></p>
+
+                    <button th:if="${#authentication.getName() == comment.getAuthor().getEmail()}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModa">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    </button>
+
+                    <form th:action="@{'/detail/devices/remove_comment'}" method="post">
+                    <input type="hidden" name="comment_id" th:value="${comment.getId()}">
                     <input type="hidden" name="item_id" th:value="${device.getId()}">
+                    <button th:if="${#authentication.getName() == comment.getAuthor().getEmail()}" type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-primary">add</button>
-            </form>
-
-
-            <div th:each="comment : ${comments}" class="row">
-                <div class="col-8">
-                    <h2 th:text="${comment.getAuthor().getFullname()}"></h2>
-                    <h4 th:text="${comment.getComment()}"></h4>
-                </div>
-                <div class="col-4">
-                    <small th:text="${comment.getAddedDate()}"></small>
-                    <div class="row">
-                        <form method="post" th:action="@{'/detail/devices/remove_comment'}">
-                            <input type="hidden" name="comment_id" th:value="${comment.getId()}">
-                            <input type="hidden" name="item_id" th:value="${device.getId()}">
-                            <button  type="submit" class="btn btn-danger">-</button>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModa" tabindex="-1" aria-labelledby="exampleModaLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{'/detail/devices/edit_comment'}" method="post">
+                            <div class="modal-body">
+                                <input type="text" name="comment_text" th:value="${comment.getComment()}">
+                                <input type="hidden" name="comment_id" th:value="${comment.getId()}">
+                                <input type="hidden" name="item_id" th:value="${device.getId()}">
+                            </div>
+                            <div class="modal-footer">
+                                <button th:text="#{label.cancel}" type="button" class="btn btn-secondary" data-bs-dismiss="modal"></button>
+                                <button th:text="#{label.save}" type="submit" class="btn btn-primary"></button>
+                            </div>
                         </form>
                     </div>
                 </div>

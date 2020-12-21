@@ -57,13 +57,13 @@
 
         </form>
 
-
+        <div class="mt-5">
         <div th:each="category : ${allCategories}" class="row">
             <div class="col-4">
-                <span th:text="${category.getName()}"></span>
+                <h4 th:text="${category.getName()}"></h4>
             </div>
             <div class="col-6">
-                <span th:text="${category.getLogoURL()}"></span>
+<!--                <span th:text="${category.getLogoURL()}"></span>-->
             </div>
             <div class="col-2">
                 <form th:action="@{add_category}" method="post">
@@ -73,15 +73,12 @@
                 </form>
             </div>
         </div>
-
-        <br>
-
         <div th:each="category : ${itemCategories}" class="row">
             <div class="col-4">
-                <span th:text="${category.getName()}"></span>
+                <h4 th:text="${category.getName()}"></h4>
             </div>
             <div class="col-6">
-                <span th:text="${category.getLogoURL()}"></span>
+<!--                <span th:text="${category.getLogoURL()}"></span>-->
             </div>
             <div class="col-2">
                 <form th:action="@{remove_category}" method="post">
@@ -91,13 +88,13 @@
                 </form>
             </div>
         </div>
-
+        </div>
         <br>
 
-        <span th:text="${items.getName()}"></span>
+
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#addModal">ADD NEW</button>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal">ADD NEW</button>
 
         <!-- Modal -->
         <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

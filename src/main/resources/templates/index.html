@@ -106,12 +106,12 @@
                     <p th:utext="${device.getBrand().getName()}" class="card-text"></p>
                 </div>
 
-                <a class="list-group-item list-group-item-dark">
-                    <div class="row mr-auto align-self-center">
-                        <i th:each="star : ${#numbers.sequence(0, device.getStars()-1)}"  class="fa fa-star"></i>
-                        <i th:each="star : ${#numbers.sequence(0, 5 - device.getStars() - 1)}" class="fa fa-star-o"></i>
+                <div class="card-footer text-muted">
+                    <div th:each="i : ${#numbers.sequence(0, 5)}" style="display: inline-block;">
+                        <i th:if="${i < device.getStars()}" class="far fa-star" style="color: red"></i>
+                        <i th:if="${i > device.getStars()}" class="far fa-star"></i>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
 
